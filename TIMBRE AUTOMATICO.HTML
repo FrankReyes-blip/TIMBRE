@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Timbre Escolar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2d2d2d);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #fff;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: rgba(30, 30, 40, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        header {
+            background: linear-gradient(to right, #0d3b66, #1a5f8c);
+            padding: 25px;
+            text-align: center;
+            border-bottom: 3px solid #ffcc00;
+            position: relative;
+        }
+        
+        .school-badge {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 70px;
+            height: 70px;
+            background: #ffcc00;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #0d3b66;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+        }
+        
+        h1 {
+            color: #ffcc00;
+            font-size: 2.4rem;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.4);
+        }
+        
+        .subtitle {
+            color: #aaddff;
+            font-size: 1.2rem;
+            margin-top: 5px;
+        }
+        
+        .main-content {
+            display: flex;
+            padding: 25px;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        
+        .control-panel {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .schedule-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(20, 20, 30, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .panel {
+            background: rgba(40, 40, 60, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .panel-title {
+            color: #ffcc00;
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 204, 0, 0.4);
+        }
+        
+        .clock-container {
+            text-align: center;
+            padding: 15px;
+            background: rgba(0, 30, 60, 0.3);
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .date {
+            font-size: 1.3rem;
+            color: #aaddff;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .clock {
+            font-size: 3.8rem;
+            font-weight: bold;
+            color: #ffcc00;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 10px;
+        }
+        
+        .work-hour {
+            font-size: 1.5rem;
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.15);
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            border: 1px solid rgba(74, 222, 128, 0.3);
+        }
+        
+        .status {
+            background: rgba(0, 80, 120, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.2rem;
+            border-left: 4px solid #ffcc00;
+        }
+        
+        .status span {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        .select-container {
+            margin: 20px 0;
+        }
+        
+        select {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            background: #2a2a4a;
+            color: white;
+            border: 1px solid #555;
+            outline: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        select:focus {
+            border-color: #ffcc00;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            padding: 18px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            min-width: 220px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        #startButton {
+            background: linear-gradient(to right, #28a745, #20c997);
+            color: white;
+        }
+        
+        #startButton:hover {
+            background: linear-gradient(to right, #218838, #1aa179);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        #playTimbreButton {
+            background: linear-gradient(to right, #ff5722, #ff9800);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #playTimbreButton:hover {
+            background: linear-gradient(to right, #e64a19, #f57c00);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+        }
+        
+        .event-log {
+            background: rgba(10, 10, 20, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            height: 220px;
+            overflow-y: auto;
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .event-item {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 1rem;
+            display: flex;
+            background: rgba(30, 30, 50, 0.5);
+            margin-bottom: 8px;
+            border-radius: 6px;
+        }
+        
+        .event-time {
+            color: #ffcc00;
+            min-width: 80px;
+            font-weight: bold;
+        }
+        
+        .event-text {
+            flex: 1;
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 1rem;
+        }
+        
+        .schedule-table th {
+            background: rgba(0, 60, 120, 0.6);
+            padding: 12px;
+            text-align: left;
+        }
+        
+        .schedule-table td {
+            padding: 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .schedule-table tr:nth-child(even) {
+            background: rgba(30, 30, 50, 0.5);
+        }
+        
+        .schedule-table tr:hover {
+            background: rgba(50, 50, 80, 0.6);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(0, 20, 40, 0.8);
+            color: #aaddff;
+            font-size: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #28a745, #20c997);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+            animation: slideIn 0.5s, fadeOut 0.5s 2.5s;
+            font-size: 1.2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        
+        .bell-animation {
+            display: inline-block;
+            animation: ring 1s ease-in-out infinite;
+            font-size: 2rem;
+        }
+        
+        @keyframes ring {
+            0% { transform: rotate(0deg); }
+            10% { transform: rotate(15deg); }
+            20% { transform: rotate(-15deg); }
+            30% { transform: rotate(10deg); }
+            40% { transform: rotate(-10deg); }
+            50% { transform: rotate(5deg); }
+            60% { transform: rotate(-5deg); }
+            70% { transform: rotate(2deg); }
+            80% { transform: rotate(-2deg); }
+            90%, 100% { transform: rotate(0deg); }
+        }
+        
+        .schedule-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 60, 120, 0.4);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 204, 0, 0.4);
+        }
+        
+        .schedule-name {
+            font-size: 1.6rem;
+            color: #ffcc00;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .audio-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            margin-left: 5px;
+            animation: pulse 1s infinite;
+            box-shadow: 0 0 10px #4ade80;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .timbre-timer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.5);
+            width: 100%;
+            transform-origin: left;
+            transform: scaleX(0);
+            transition: transform 0.1s linear;
+        }
+        
+        .manual-timbre-active .timbre-timer {
+            transform: scaleX(1);
+            background: #ffcc00;
+            box-shadow: 0 0 10px #ffcc00;
+        }
+        
+        .manual-timbre-active {
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+            animation: pulseButton 1s infinite;
+        }
+        
+        @keyframes pulseButton {
+            0% { box-shadow: 0 0 10px rgba(255, 204, 0, 0.6); }
+            50% { box-shadow: 0 0 25px rgba(255, 204, 0, 0.9); }
+            100% { box-shadow: 0 0 10px rgba(255, 204, 0, 0.6); }
+        }
+        
+        .timer-display {
+            font-size: 1.1rem;
+            margin-top: 8px;
+            color: #ffcc00;
+            font-weight: bold;
+            height: 25px;
+            text-align: center;
+        }
+        
+        .sound-selector {
+            background: rgba(30, 30, 50, 0.8);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .sound-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .sound-option {
+            padding: 15px;
+            background: rgba(50, 50, 70, 0.8);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sound-option:hover {
+            background: rgba(70, 70, 100, 0.8);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .sound-option.active {
+            border-color: #ffcc00;
+            background: rgba(90, 90, 120, 0.8);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
+        }
+        
+        .sound-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+        }
+        
+        .sound-name {
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        
+        .sound-description {
+            font-size: 0.8rem;
+            margin-top: 8px;
+            color: #aaddff;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            background: rgba(40, 40, 60, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .volume-control i {
+            color: #ffcc00;
+            font-size: 1.5rem;
+        }
+        
+        .volume-slider {
+            flex: 1;
+            -webkit-appearance: none;
+            height: 10px;
+            border-radius: 5px;
+            background: linear-gradient(to right, #555, #ffcc00);
+            outline: none;
+        }
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: #ffcc00;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+        }
+        
+        .sound-preview {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .sound-preview button {
+            padding: 12px 20px;
+            background: rgba(70, 70, 100, 0.8);
+            border: 1px solid #ffcc00;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: auto;
+            font-size: 1.1rem;
+        }
+        
+        .sound-preview button:hover {
+            background: rgba(90, 90, 120, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.5);
+        }
+        
+        .sound-quality {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 204, 0, 0.2);
+            color: #ffcc00;
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        .sound-recommended {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(74, 222, 128, 0.2);
+            color: #4ade80;
+            font-size: 0.7rem;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .buttons {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .school-badge {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin: 0 auto 15px;
+            }
+        }
+        
+        .sound-explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(20, 20, 40, 0.6);
+            border-radius: 10px;
+            border-left: 3px solid #ffcc00;
+        }
+        
+        .sound-explanation h3 {
+            color: #ffcc00;
+            margin-bottom: 10px;
+        }
+        
+        .sound-explanation ul {
+            padding-left: 20px;
+        }
+        
+        .sound-explanation li {
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="school-badge">🔔</div>
+            <h1>SISTEMA DE TIMBRE ESCOLAR</h1>
+            <div class="subtitle">COLEGIO LINGAN - SONIDOS PROGRAMADOS</div>
+        </header>
+        
+        <div class="main-content">
+            <div class="control-panel">
+                <div class="panel">
+                    <div class="clock-container">
+                        <div class="date" id="date"></div>
+                        <div class="clock" id="clock">00:00:00</div>
+                        <div class="work-hour" id="workHour">Hora de trabajo: Cargando...</div>
+                    </div>
+                    
+                    <div class="status">
+                        <p>Estado del sistema: <span id="systemStatus">INACTIVO</span></p>
+                        <p>Próximo timbre: <span id="nextBell">--:--</span></p>
+                        <div class="timer-display" id="timerDisplay"></div>
+                    </div>
+                    
+                    <div class="select-container">
+                        <select id="scheduleSelect">
+                            <option value="normal">Horario Normal (45 min por clase)</option>
+                            <option value="alterno">Horario Alterno (40 min por clase)</option>
+                            <option value="superalterno">Horario Super Alterno (30 min por clase)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="buttons">
+                        <button id="startButton">
+                            <i class="fas fa-play"></i> INICIAR SISTEMA
+                        </button>
+                        <button id="playTimbreButton">
+                            <i class="fas fa-bell"></i> TIMBRE MANUAL (5s)
+                            <div class="timbre-timer"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="fas fa-clipboard-list"></i> REGISTRO DE EVENTOS
+                    </div>
+                    <div class="event-log">
+                        <div id="eventsContainer">
+                            <div class="event-item">
+                                <div class="event-time">00:00:00</div>
+                                <div class="event-text">Sistema inicializado. Seleccione un timbre y pulse Iniciar</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="schedule-panel">
+                <div class="panel">
+                    <div class="panel-title">
+                        <i class="fas fa-music"></i> SELECCIONE SU TIMBRE
+                    </div>
+                    
+                    <div class="sound-selector">
+                        <div class="sound-grid">
+                            <div class="sound-option active" data-sound="classic">
+                                <div class="sound-recommended">Recomendado</div>
+                                <div class="sound-icon">🔔</div>
+                                <div class="sound-name">Timbre Clásico</div>
+                                <div class="sound-description">Sonido tradicional de campana</div>
+                                <div class="sound-quality">Alta calidad</div>
+                            </div>
+                            <div class="sound-option" data-sound="bell">
+                                <div class="sound-icon">🏫</div>
+                                <div class="sound-name">Timbre Escolar</div>
+                                <div class="sound-description">Resonancia metálica</div>
+                                <div class="sound-quality">Alta calidad</div>
+                            </div>
+                            <div class="sound-option" data-sound="chime">
+                                <div class="sound-icon">🎵</div>
+                                <div class="sound-name">Campanilla</div>
+                                <div class="sound-description">Sonido suave de campana</div>
+                                <div class="sound-quality">Media calidad</div>
+                            </div>
+                            <div class="sound-option" data-sound="digital">
+                                <div class="sound-icon">📱</div>
+                                <div class="sound-name">Digital Moderno</div>
+                                <div class="sound-description">Tono electrónico</div>
+                                <div class="sound-quality">Alta calidad</div>
+                            </div>
+                        </div>
+                        
+                        <div class="volume-control">
+                            <i class="fas fa-volume-up"></i>
+                            <input type="range" min="0" max="100" value="80" class="volume-slider" id="volumeSlider">
+                        </div>
+                        
+                        <div class="sound-preview">
+                            <button id="previewSound">
+                                <i class="fas fa-play-circle"></i> Previsualizar sonido
+                            </button>
+                            <div class="audio-indicator" id="audioIndicator" style="display: none;"></div>
+                        </div>
+                        
+                        <div class="sound-explanation">
+                            <h3>Sonidos Generados Programáticamente</h3>
+                            <ul>
+                                <li>Utilizamos la Web Audio API para crear sonidos</li>
+                                <li>Todos los sonidos se generan en tiempo real</li>
+                                <li>No se utilizan archivos de audio externos</li>
+                                <li>Totalmente personalizables y configurables</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule-header" style="margin-top: 25px;">
+                        <div class="schedule-name">Horario Actual</div>
+                        <div id="scheduleDuration">45 minutos por clase</div>
+                    </div>
+                    
+                    <div id="scheduleDisplay">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Inicio</th>
+                                    <th>Fin</th>
+                                    <th>Duración</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>07:40</td>
+                                    <td>08:25</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>08:25</td>
+                                    <td>09:10</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>09:10</td>
+                                    <td>09:55</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>09:55</td>
+                                    <td>10:40</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>Recreo</td>
+                                    <td>10:40</td>
+                                    <td>11:00</td>
+                                    <td>20 min</td>
+                                </tr>
+                                <tr>
+                                    <td>5</td>
+                                    <td>11:00</td>
+                                    <td>11:45</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>6</td>
+                                    <td>11:45</td>
+                                    <td>12:30</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>Almuerzo</td>
+                                    <td>12:30</td>
+                                    <td>13:00</td>
+                                    <td>30 min</td>
+                                </tr>
+                                <tr>
+                                    <td>7</td>
+                                    <td>13:00</td>
+                                    <td>13:45</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>8</td>
+                                    <td>13:45</td>
+                                    <td>14:30</td>
+                                    <td>45 min</td>
+                                </tr>
+                                <tr>
+                                    <td>9</td>
+                                    <td>14:30</td>
+                                    <td>15:15</td>
+                                    <td>45 min</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            Sistema desarrollado para Colegio Lingan &copy; 2023 | Funciona 100% offline
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <div class="bell-animation">🔔</div>
+        <div>TIMBRE ACTIVADO!</div>
+    </div>
+
+    <script>
+        // Definición completa de horarios
+        const horarios = {
+            normal: {
+                nombre: "Horario Normal",
+                duracion: "45 minutos por clase",
+                inicio: "07:40",
+                clases: [
+                    { inicio: "07:40", fin: "08:25", tipo: "clase", nombre: "Hora 1" },
+                    { inicio: "08:25", fin: "09:10", tipo: "clase", nombre: "Hora 2" },
+                    { inicio: "09:10", fin: "09:55", tipo: "clase", nombre: "Hora 3" },
+                    { inicio: "09:55", fin: "10:40", tipo: "clase", nombre: "Hora 4" },
+                    { inicio: "10:40", fin: "11:00", tipo: "recreo", nombre: "Recreo" },
+                    { inicio: "11:00", fin: "11:45", tipo: "clase", nombre: "Hora 5" },
+                    { inicio: "11:45", fin: "12:30", tipo: "clase", nombre: "Hora 6" },
+                    { inicio: "12:30", fin: "13:00", tipo: "almuerzo", nombre: "Almuerzo" },
+                    { inicio: "13:00", fin: "13:45", tipo: "clase", nombre: "Hora 7" },
+                    { inicio: "13:45", fin: "14:30", tipo: "clase", nombre: "Hora 8" },
+                    { inicio: "14:30", fin: "15:15", tipo: "clase", nombre: "Hora 9" }
+                ],
+                fin: "15:15"
+            },
+            alterno: {
+                nombre: "Horario Alterno",
+                duracion: "40 minutos por clase",
+                inicio: "07:40",
+                clases: [
+                    { inicio: "07:40", fin: "08:20", tipo: "clase", nombre: "Hora 1" },
+                    { inicio: "08:20", fin: "09:00", tipo: "clase", nombre: "Hora 2" },
+                    { inicio: "09:00", fin: "09:40", tipo: "clase", nombre: "Hora 3" },
+                    { inicio: "09:40", fin: "10:20", tipo: "clase", nombre: "Hora 4" },
+                    { inicio: "10:20", fin: "10:40", tipo: "recreo", nombre: "Recreo" },
+                    { inicio: "10:40", fin: "11:20", tipo: "clase", nombre: "Hora 5" },
+                    { inicio: "11:20", fin: "12:00", tipo: "clase", nombre: "Hora 6" },
+                    { inicio: "12:00", fin: "12:30", tipo: "clase", nombre: "Hora 7" },
+                    { inicio: "12:30", fin: "13:00", tipo: "almuerzo", nombre: "Almuerzo" }
+                ],
+                fin: "13:00"
+            },
+            superalterno: {
+                nombre: "Horario Super Alterno",
+                duracion: "30 minutos por clase",
+                inicio: "07:40",
+                clases: [
+                    { inicio: "07:40", fin: "08:10", tipo: "clase", nombre: "Hora 1" },
+                    { inicio: "08:10", fin: "08:40", tipo: "clase", nombre: "Hora 2" },
+                    { inicio: "08:40", fin: "09:10", tipo: "clase", nombre: "Hora 3" },
+                    { inicio: "09:10", fin: "09:40", tipo: "clase", nombre: "Hora 4" },
+                    { inicio: "09:40", fin: "10:10", tipo: "clase", nombre: "Hora 5" },
+                    { inicio: "10:10", fin: "10:40", tipo: "clase", nombre: "Hora 6" },
+                    { inicio: "10:40", fin: "11:00", tipo: "recreo", nombre: "Recreo" },
+                    { inicio: "11:00", fin: "11:30", tipo: "clase", nombre: "Hora 7" },
+                    { inicio: "11:30", fin: "12:00", tipo: "clase", nombre: "Hora 8" },
+                    { inicio: "12:00", fin: "12:30", tipo: "clase", nombre: "Hora 9" },
+                    { inicio: "12:30", fin: "13:00", tipo: "almuerzo", nombre: "Almuerzo" }
+                ],
+                fin: "13:00"
+            }
+        };
+
+        // Variables globales
+        let selectedSchedule = 'normal';
+        let clockInterval = null;
+        let bellInterval = null;
+        let nextBellTime = null;
+        let today = new Date().toDateString();
+        let triggeredEvents = [];
+        let manualTimbreActive = false;
+        let timbreTimer = null;
+        let timbreCountdown = null;
+        let selectedSound = 'classic';
+        let volume = 0.8;
+        let audioContext;
+        
+        // Elementos del DOM
+        const clockElement = document.getElementById('clock');
+        const workHourElement = document.getElementById('workHour');
+        const startButton = document.getElementById('startButton');
+        const playTimbreButton = document.getElementById('playTimbreButton');
+        const dateElement = document.getElementById('date');
+        const systemStatus = document.getElementById('systemStatus');
+        const nextBellElement = document.getElementById('nextBell');
+        const eventsContainer = document.getElementById('eventsContainer');
+        const notification = document.getElementById('notification');
+        const scheduleDisplay = document.getElementById('scheduleDisplay');
+        const scheduleDuration = document.getElementById('scheduleDuration');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const previewSoundButton = document.getElementById('previewSound');
+        const audioIndicator = document.getElementById('audioIndicator');
+        
+        // Función para crear sonido de timbre escolar programáticamente
+        function playBellSound(duration = 2) {
+            try {
+                // Crear contexto de audio si no existe
+                if (!audioContext) {
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+                    audioContext = new AudioContext();
+                }
+                
+                // Crear oscilador principal
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                // Configurar según el tipo de sonido
+                const now = audioContext.currentTime;
+                
+                switch(selectedSound) {
+                    case 'classic':
+                        // Timbre clásico (ding-dong)
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(784, now); // G5
+                        oscillator.frequency.setValueAtTime(523.25, now + 0.3); // C5
+                        gainNode.gain.setValueAtTime(volume, now);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+                        break;
+                        
+                    case 'bell':
+                        // Timbre escolar (campana resonante)
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(880, now); // A5
+                        oscillator.frequency.exponentialRampToValueAtTime(659.25, now + 0.3); // E5
+                        oscillator.frequency.exponentialRampToValueAtTime(523.25, now + 0.6); // C5
+                        
+                        // Crear efecto de resonancia con envolvente de ganancia
+                        gainNode.gain.setValueAtTime(0, now);
+                        gainNode.gain.linearRampToValueAtTime(volume, now + 0.1);
+                        gainNode.gain.exponentialRampToValueAtTime(volume * 0.7, now + 0.4);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+                        break;
+                        
+                    case 'chime':
+                        // Campanilla suave
+                        oscillator.type = 'triangle';
+                        oscillator.frequency.setValueAtTime(1046.50, now); // C6
+                        oscillator.frequency.exponentialRampToValueAtTime(1318.51, now + 0.2); // E6
+                        oscillator.frequency.exponentialRampToValueAtTime(1567.98, now + 0.4); // G6
+                        gainNode.gain.setValueAtTime(volume * 0.8, now);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+                        break;
+                        
+                    case 'digital':
+                        // Sonido digital moderno
+                        oscillator.type = 'square';
+                        oscillator.frequency.setValueAtTime(1000, now);
+                        oscillator.frequency.setValueAtTime(1500, now + 0.1);
+                        oscillator.frequency.setValueAtTime(800, now + 0.2);
+                        gainNode.gain.setValueAtTime(volume, now);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+                        break;
+                }
+                
+                // Conectar nodos
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Iniciar y detener el sonido
+                oscillator.start();
+                oscillator.stop(now + duration);
+                
+                // Mostrar notificación visual
+                notification.style.display = 'flex';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+                
+                // Mostrar indicador de audio
+                audioIndicator.style.display = 'inline-block';
+                setTimeout(() => {
+                    audioIndicator.style.display = 'none';
+                }, duration * 1000);
+                
+                return true;
+            } catch (e) {
+                console.error("Error al reproducir el timbre:", e);
+                return false;
+            }
+        }
+        
+        // Función para activar el timbre manual durante 5 segundos
+        function playManualTimbre() {
+            if (manualTimbreActive) return;
+            
+            manualTimbreActive = true;
+            playTimbreButton.classList.add('manual-timbre-active');
+            playTimbreButton.disabled = true;
+            
+            let seconds = 5;
+            timerDisplay.textContent = `Timbre activo: ${seconds}s`;
+            
+            // Reproducir el sonido
+            playBellSound(5);
+            
+            // Actualizar temporizador visual
+            timbreTimer = setInterval(() => {
+                seconds--;
+                timerDisplay.textContent = `Timbre activo: ${seconds}s`;
+                
+                if (seconds <= 0) {
+                    stopManualTimbre();
+                }
+            }, 1000);
+            
+            // Habilitar después de 5 segundos
+            timbreCountdown = setTimeout(() => {
+                stopManualTimbre();
+            }, 5000);
+        }
+        
+        // Función para detener el timbre manual
+        function stopManualTimbre() {
+            if (!manualTimbreActive) return;
+            
+            clearInterval(timbreTimer);
+            clearTimeout(timbreCountdown);
+            
+            manualTimbreActive = false;
+            playTimbreButton.classList.remove('manual-timbre-active');
+            playTimbreButton.disabled = false;
+            timerDisplay.textContent = "";
+        }
+        
+        // Función para mostrar el horario seleccionado
+        function renderSchedule(scheduleType) {
+            const schedule = horarios[scheduleType];
+            scheduleDuration.textContent = schedule.duracion;
+            
+            let tableHTML = `
+                <table class="schedule-table">
+                    <thead>
+                        <tr>
+                            <th>Hora</th>
+                            <th>Inicio</th>
+                            <th>Fin</th>
+                            <th>Duración</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            
+            schedule.clases.forEach(clase => {
+                // Calcular duración en minutos
+                const inicioParts = clase.inicio.split(':');
+                const finParts = clase.fin.split(':');
+                const inicioMinutos = parseInt(inicioParts[0]) * 60 + parseInt(inicioParts[1]);
+                const finMinutos = parseInt(finParts[0]) * 60 + parseInt(finParts[1]);
+                const duracion = finMinutos - inicioMinutos;
+                
+                tableHTML += `
+                    <tr>
+                        <td>${clase.nombre}</td>
+                        <td>${clase.inicio}</td>
+                        <td>${clase.fin}</td>
+                        <td>${duracion} min</td>
+                    </tr>`;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>`;
+            
+            scheduleDisplay.innerHTML = tableHTML;
+        }
+        
+        // Función para actualizar la hora en tiempo real
+        function updateClock() {
+            const currentTime = new Date();
+            const hours = String(currentTime.getHours()).padStart(2, '0');
+            const minutes = String(currentTime.getMinutes()).padStart(2, '0');
+            const seconds = String(currentTime.getSeconds()).padStart(2, '0');
+            clockElement.textContent = `${hours}:${minutes}:${seconds}`;
+            
+            // Actualizar la fecha si es un nuevo día
+            const currentDate = currentTime.toDateString();
+            if (currentDate !== today) {
+                today = currentDate;
+                updateDate();
+                resetTriggeredEvents();
+            }
+            
+            updateWorkHour();
+        }
+        
+        // Función para actualizar la fecha
+        function updateDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateElement.textContent = now.toLocaleDateString('es-ES', options);
+        }
+        
+        // Función para actualizar la hora de trabajo según el horario seleccionado
+        function updateWorkHour() {
+            const schedule = horarios[selectedSchedule];
+            const currentTime = new Date();
+            const currentTimeStr = `${String(currentTime.getHours()).padStart(2, '0')}:${String(currentTime.getMinutes()).padStart(2, '0')}`;
+            
+            // Verificar si estamos dentro del horario escolar
+            if (currentTimeStr < schedule.inicio) {
+                workHourElement.textContent = `Horario comienza a las ${schedule.inicio}`;
+                return;
+            }
+            
+            if (currentTimeStr > schedule.fin) {
+                workHourElement.textContent = 'Horario escolar finalizado';
+                return;
+            }
+            
+            // Buscar la hora de trabajo correspondiente
+            for (let i = 0; i < schedule.clases.length; i++) {
+                const horario = schedule.clases[i];
+                if (currentTimeStr >= horario.inicio && currentTimeStr < horario.fin) {
+                    workHourElement.textContent = `${horario.nombre} (${horario.inicio} - ${horario.fin})`;
+                    return;
+                }
+            }
+            
+            workHourElement.textContent = 'Cambio de clase';
+        }
+        
+        // Función para reproducir el timbre automático
+        function playBell() {
+            try {
+                const success = playBellSound(2);
+                
+                if (success) {
+                    // Añadir evento al registro
+                    const now = new Date();
+                    const timeStr = now.toTimeString().substring(0, 8);
+                    addEventToLog(`Timbre automático activado (${selectedSound})`);
+                    return true;
+                } else {
+                    addEventToLog("Error al reproducir el timbre automático");
+                    return false;
+                }
+            } catch (e) {
+                console.log("Error en playBell:", e);
+                addEventToLog("Error al reproducir el timbre automático");
+                return false;
+            }
+        }
+        
+        // Función para verificar si es hora de tocar el timbre
+        function checkForBellEvents() {
+            const schedule = horarios[selectedSchedule];
+            const currentTime = new Date();
+            const currentTimeStr = `${String(currentTime.getHours()).padStart(2, '0')}:${String(currentTime.getMinutes()).padStart(2, '0')}`;
+            
+            // Encontrar el próximo timbre
+            let nextBell = null;
+            
+            // Verificar todos los eventos posibles
+            for (const clase of schedule.clases) {
+                // Solo verificar eventos que no han sido activados hoy
+                const eventKey = `${clase.inicio}-${today}`;
+                
+                // Comprobar inicio de clase
+                if (clase.inicio === currentTimeStr && !triggeredEvents.includes(eventKey)) {
+                    playBell();
+                    triggeredEvents.push(eventKey);
+                }
+                
+                // Comprobar fin de clase (excepto para recreo y almuerzo)
+                if (clase.tipo === 'clase') {
+                    const finEventKey = `${clase.fin}-${today}`;
+                    if (clase.fin === currentTimeStr && !triggeredEvents.includes(finEventKey)) {
+                        playBell();
+                        triggeredEvents.push(finEventKey);
+                    }
+                }
+                
+                // Encontrar el próximo evento
+                if ((clase.inicio > currentTimeStr || clase.fin > currentTimeStr) && 
+                    (nextBell === null || clase.inicio < nextBell || clase.fin < nextBell)) {
+                    if (clase.inicio > currentTimeStr && (nextBell === null || clase.inicio < nextBell)) {
+                        nextBell = clase.inicio;
+                    }
+                    if (clase.tipo === 'clase' && clase.fin > currentTimeStr && (nextBell === null || clase.fin < nextBell)) {
+                        nextBell = clase.fin;
+                    }
+                }
+            }
+            
+            // Actualizar el próximo timbre
+            nextBellTime = nextBell;
+            nextBellElement.textContent = `Próximo timbre: ${nextBell || '--:--'}`;
+        }
+        
+        // Función para añadir eventos al registro
+        function addEventToLog(eventText) {
+            const eventItem = document.createElement('div');
+            eventItem.className = 'event-item';
+            
+            const now = new Date();
+            const timeStr = now.toTimeString().substring(0, 8);
+            
+            eventItem.innerHTML = `
+                <div class="event-time">${timeStr}</div>
+                <div class="event-text">${eventText}</div>
+            `;
+            
+            eventsContainer.prepend(eventItem);
+            
+            // Limitar el número de eventos mostrados
+            if (eventsContainer.children.length > 20) {
+                eventsContainer.removeChild(eventsContainer.lastChild);
+            }
+        }
+        
+        // Función para reiniciar los eventos activados
+        function resetTriggeredEvents() {
+            triggeredEvents = [];
+            addEventToLog('Nuevo día - Eventos reiniciados');
+        }
+        
+        // Iniciar el sistema
+        startButton.addEventListener('click', () => {
+            selectedSchedule = document.getElementById('scheduleSelect').value;
+            
+            // Actualizar la visualización del horario
+            renderSchedule(selectedSchedule);
+            
+            // Detener intervalos existentes
+            if (clockInterval) clearInterval(clockInterval);
+            if (bellInterval) clearInterval(bellInterval);
+            
+            // Iniciar actualización del reloj
+            updateClock();
+            clockInterval = setInterval(updateClock, 1000);
+            
+            // Iniciar verificación de timbres
+            checkForBellEvents();
+            bellInterval = setInterval(checkForBellEvents, 10000); // Verificar cada 10 segundos
+            
+            // Actualizar estado del sistema
+            systemStatus.textContent = 'ACTIVO';
+            systemStatus.style.color = '#4ade80';
+            addEventToLog(`Sistema iniciado con horario ${horarios[selectedSchedule].nombre}`);
+            
+            // Probar el sonido del timbre al iniciar
+            setTimeout(() => {
+                if (playBellSound(2)) {
+                    addEventToLog('Prueba de sonido automático exitosa');
+                } else {
+                    addEventToLog('Error en prueba de sonido automático');
+                }
+            }, 500);
+        });
+        
+        // Botón para tocar el timbre manualmente
+        playTimbreButton.addEventListener('click', () => {
+            playManualTimbre();
+            addEventToLog(`Timbre manual activado por 5 segundos (${selectedSound})`);
+        });
+        
+        // Cambiar el horario mostrado al cambiar la selección
+        document.getElementById('scheduleSelect').addEventListener('change', function() {
+            selectedSchedule = this.value;
+            renderSchedule(selectedSchedule);
+        });
+        
+        // Selección de sonido
+        document.querySelectorAll('.sound-option').forEach(option => {
+            option.addEventListener('click', function() {
+                // Quitar clase activa de todas las opciones
+                document.querySelectorAll('.sound-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                
+                // Agregar clase activa a la opción seleccionada
+                this.classList.add('active');
+                
+                // Actualizar sonido seleccionado
+                selectedSound = this.dataset.sound;
+                addEventToLog(`Sonido cambiado a: ${this.querySelector('.sound-name').textContent}`);
+            });
+        });
+        
+        // Control de volumen
+        volumeSlider.addEventListener('input', function() {
+            volume = this.value / 100;
+            addEventToLog(`Volumen ajustado a: ${Math.round(volume * 100)}%`);
+        });
+        
+        // Previsualizar sonido
+        previewSoundButton.addEventListener('click', () => {
+            playBellSound(2);
+            addEventToLog(`Previsualizando sonido: ${selectedSound}`);
+        });
+        
+        // Inicialización
+        updateDate();
+        updateClock();
+        renderSchedule('normal');
+        addEventToLog('Sistema cargado. Seleccione un timbre y pulse Iniciar');
+    </script>
+</body>
+</html>
